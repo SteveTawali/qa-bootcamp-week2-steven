@@ -37,10 +37,11 @@ test('Create cart and add product', async ({ request }) => {
         );
 
         console.log('Add product status:', addProductResponse.status());
-        console.log('Add product body:', await addProductResponse.text());
 
-        // Known API issue: product is added, but the API returns HTTP 500.
-        // Verify the cart contents separately.
+        // Verify that the product was added successfully
+        expect(addProductResponse.status()).toBe(200);
+
+        // Retrieve the cart
         const getCartResponse = await request.get(
             `${baseURL}/carts/${cartId}`
         );
@@ -49,7 +50,7 @@ test('Create cart and add product', async ({ request }) => {
 
         const cart = await getCartResponse.json();
 
-        console.log('Retrieved cart:', cart);
+        console.log('Cart response:', cart);
 
         // Verify the cart contains an item
         expect(cart).toBeTruthy();
