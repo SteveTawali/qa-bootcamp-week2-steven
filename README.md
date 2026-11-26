@@ -1,71 +1,73 @@
-# QA Bootcamp Week 2 Starter
+# QA Bootcamp Week 2 – Playwright Test Suite
 
-This is the starting point for Week 2 of the QA bootcamp. During the week you will use it to practise:
+This repository contains my Week 2 QA bootcamp exercises using TypeScript and Playwright.
 
-- TypeScript
-- Playwright (UI testing)
-- Postman (API testing)
-- The Toolshop REST API
-
-There are no tests in this repo. You will write them during the week.
+The project includes UI tests, Page Object Model testing, and API testing against the Toolshop application.
 
 ## Prerequisites
 
-Install these before you start:
-
-- [Node.js](https://nodejs.org/) (the current LTS version)
+- [Node.js](https://nodejs.org/) (LTS)
 - [Git](https://git-scm.com/)
 - [VS Code](https://code.visualstudio.com/)
 
-## Setup
+## Setup and Running Tests
 
-Run these steps in order from a terminal.
+Clone the repository:
 
-1. Clone the repo and open the folder:
+```bash
+git clone https://github.com/SteveTawali/qa-bootcamp-week2-steven.git
+cd qa-bootcamp-week2-starter
+```
 
-   ```bash
-   git clone <repo-url>
-   cd qa-bootcamp-week2-starter
-   ```
+Complete these three steps:
 
-2. Install the dependencies:
+**1. Install dependencies and Chromium**
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+npx playwright install chromium
+```
 
-3. Install the Chromium browser for Playwright:
+**2. Configure environment variables**
 
-   ```bash
-   npx playwright install chromium
-   ```
+```bash
+cp .env.example .env
+```
 
-4. Copy `.env.example` to `.env`:
+**3. Run the test suite**
 
-   ```bash
-   cp .env.example .env
-   ```
+```bash
+npm test
+```
 
-   `.env` already contains the Toolshop website URL (`TOOLSHOP_URL`) and the Toolshop API URL (`TOOLSHOP_API_URL`). Only change them if your trainer gives you different URLs.
+## Test Coverage
 
-5. Check that your setup works:
+The Playwright suite currently includes:
 
-   ```bash
-   npm run check
-   ```
+- Login validation
+- Homepage verification
+- Product search
+- Product search using the Page Object Model
+- API product retrieval
+- Cart creation and product addition
+- Non-existent cart validation (404)
 
-   This sends a GET request to the Toolshop API's `/products` endpoint (no login needed). If everything is set up correctly, it prints your Node version, the HTTP status (200), the number of products, and a last line that says `PASS`.
+## Project Structure
 
-> **Warning:** never commit `.env`. It is where your own settings and, later in the course, your secrets (keys, tokens, passwords) live. It is listed in `.gitignore` so Git ignores it. Do not remove it from there.
+| Folder/File | Purpose |
+|---|---|
+| `tests/` | Playwright UI and API tests |
+| `pages/` | Page Object Model classes |
+| `scripts/` | Helper scripts |
+| `playwright.config.ts` | Playwright configuration |
+| `.env.example` | Example environment configuration |
 
-## Folders
+## Available Commands
 
-| Folder     | What it is for |
-|------------|----------------|
-| `tests/`   | Your Playwright tests. It is empty for now; you will add tests during the week. |
-| `scripts/` | Helper scripts. `check.ts` checks your setup and is run by `npm run check`. |
+```bash
+npm test          # Run all Playwright tests
+npm run check     # Check project and API setup
+npx playwright test --list  # List discovered tests
+```
 
-## Scripts
-
-- `npm run check`: checks your `.env` and that you can reach the Toolshop API.
-- `npm test`: runs the Playwright tests in `tests/`.
+**Note:** Never commit your `.env` file. It may contain personal settings or sensitive information. The file is excluded through `.gitignore`.

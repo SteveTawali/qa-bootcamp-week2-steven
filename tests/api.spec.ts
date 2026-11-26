@@ -14,6 +14,16 @@ test('GET products returns status 200', async ({ request }) => {
 });
 
 test('Create cart and add product', async ({ request }) => {
+    // Get a valid product ID
+    const productsResponse = await request.get(`${baseURL}/products`);
+
+    expect(productsResponse.status()).toBe(200);
+
+    const productsObject = await productsResponse.json();
+    const productId = productsObject.data[0].id;
+
+    expect(productId).toBeTruthy();
+
     // Create a new cart
     const cartResponse = await request.post(`${baseURL}/carts`);
 
@@ -25,20 +35,20 @@ test('Create cart and add product', async ({ request }) => {
     expect(cartId).toBeTruthy();
 
     try {
-        // Add a product to the cart
+        // Add the product to the cart
         const addProductResponse = await request.post(
             `${baseURL}/carts/${cartId}`,
             {
                 data: {
-                    product_id: '01M8BAFJCSN2XBNM2Y9V6YW3KN',
+                    product_id: productId,
                     quantity: 1
                 }
             }
         );
 
         console.log('Add product status:', addProductResponse.status());
+        console.log('Add product response:', await addProductResponse.text());
 
-        // Verify that the product was added successfully
         expect(addProductResponse.status()).toBe(200);
 
         // Retrieve the cart
