@@ -70,4 +70,8 @@ npm run check     # Check project and API setup
 npx playwright test --list  # List discovered tests
 ```
 
+### Optional Cucumber Task
+
+The optional Cucumber.js scenario was not completed. The Wednesday `features/cart.feature` file is retained as a feature specification, but it is not connected to step definitions or configured to run.
+
 **Note:** Never commit your `.env` file. It may contain personal settings or sensitive information. The file is excluded through `.gitignore`.
