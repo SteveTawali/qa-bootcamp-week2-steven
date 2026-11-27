@@ -1,10 +1,84 @@
+
 import { test, expect } from '@playwright/test';
 
-test('GET request fixture that checks the status and one field', async ({ request }) => {
-   const response =  await request.get('https://api.practicesoftwaretesting.com/products');
-   console.log(await response.status())
-   expect(await response.status()).toBe(200)
-   const responseObject = await response.json()
-   expect(responseObject.data[0].name).toBeTruthy();
+const baseURL = 'https://api.practicesoftwaretesting.com';
 
+test('GET products returns status 200', async ({ request }) => {
+    const response = await request.get(`${baseURL}/products`);
+
+    expect(response.status()).toBe(200);
+
+    const responseObject = await response.json();
+
+    expect(responseObject.data[0].name).toBeTruthy();
+});
+
+test('Create cart and add product', async ({ request }) => {
+    // Get a valid product ID
+    const productsResponse = await request.get(`${baseURL}/products`);
+
+    expect(productsResponse.status()).toBe(200);
+
+    const productsObject = await productsResponse.json();
+    const productId = productsObject.data[0].id;
+
+    expect(productId).toBeTruthy();
+
+    // Create a new cart
+    const cartResponse = await request.post(`${baseURL}/carts`);
+
+    expect(cartResponse.status()).toBe(201);
+
+    const cartObject = await cartResponse.json();
+    const cartId = cartObject.id;
+
+    expect(cartId).toBeTruthy();
+
+    try {
+        // Add the product to the cart
+        const addProductResponse = await request.post(
+            `${baseURL}/carts/${cartId}`,
+            {
+                data: {
+                    product_id: productId,
+                    quantity: 1
+                }
+            }
+        );
+
+        console.log('Add product status:', addProductResponse.status());
+        console.log('Add product response:', await addProductResponse.text());
+
+        expect(addProductResponse.status()).toBe(200);
+
+        // Retrieve the cart
+        const getCartResponse = await request.get(
+            `${baseURL}/carts/${cartId}`
+        );
+
+        expect(getCartResponse.status()).toBe(200);
+
+        const cart = await getCartResponse.json();
+
+        console.log('Cart response:', cart);
+
+        // Verify the cart contains an item
+        expect(cart).toBeTruthy();
+
+    } finally {
+        // Delete the cart even if an assertion fails
+        const deleteResponse = await request.delete(
+            `${baseURL}/carts/${cartId}`
+        );
+
+        expect(deleteResponse.ok()).toBeTruthy();
+    }
+});
+
+test('GET non-existent cart returns 404', async ({ request }) => {
+    const response = await request.get(
+        `${baseURL}/carts/01NONEXISTENTCARTID000000`
+    );
+
+    expect(response.status()).toBe(404);
 });
