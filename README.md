@@ -16,7 +16,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/SteveTawali/qa-bootcamp-week2-steven.git
-cd qa-bootcamp-week2-starter
+cd qa-bootcamp-week2-steven
 ```
 
 Complete these three steps:
@@ -51,12 +51,14 @@ The Playwright suite currently includes:
 - API product retrieval
 - Cart creation and product addition
 - Non-existent cart validation (404)
+- Flakiness drill using Playwright retrying assertions
 
 ## Project Structure
 
 | Folder/File | Purpose |
 |---|---|
 | `tests/` | Playwright UI and API tests |
+| `tests/drill/` | Flakiness drill tests and test page |
 | `pages/` | Page Object Model classes |
 | `scripts/` | Helper scripts |
 | `playwright.config.ts` | Playwright configuration |
