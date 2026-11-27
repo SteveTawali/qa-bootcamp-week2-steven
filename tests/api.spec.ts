@@ -3,14 +3,14 @@ import { test, expect } from '@playwright/test';
 
 const baseURL = 'https://api.practicesoftwaretesting.com';
 
-test('GET products returns status 200', async ({ request }) => {
+test('GET request fixture that checks the status and one field', async ({ request }) => {
     const response = await request.get(`${baseURL}/products`);
 
     expect(response.status()).toBe(200);
 
     const responseObject = await response.json();
 
-    expect(responseObject.data[0].name).toBeTruthy();
+    expect(responseObject.data[0].name).toBe('Combination Pliers');
 });
 
 test('Create cart and add product', async ({ request }) => {
@@ -46,9 +46,6 @@ test('Create cart and add product', async ({ request }) => {
             }
         );
 
-        console.log('Add product status:', addProductResponse.status());
-        console.log('Add product response:', await addProductResponse.text());
-
         expect(addProductResponse.status()).toBe(200);
 
         // Retrieve the cart
@@ -60,9 +57,6 @@ test('Create cart and add product', async ({ request }) => {
 
         const cart = await getCartResponse.json();
 
-        console.log('Cart response:', cart);
-
-        // Verify the cart contains an item
         expect(cart).toBeTruthy();
 
     } finally {

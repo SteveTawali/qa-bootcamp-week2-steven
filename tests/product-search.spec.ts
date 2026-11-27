@@ -10,13 +10,17 @@ test('SG-7: Search using a complete product name', async ({ page }) => {
     await productSearchPage.searchForProduct('Hammer');
 
     // Verify the search result count
-    await expect(
-        page.getByText("6 products found for 'Hammer'")
-    ).toBeVisible();
+    await expect(productSearchPage.resultsMessage('Hammer'))
+        .toHaveText("6 products found for 'Hammer'");
 
     // Get product names
     const productNames = productSearchPage.getProductNames();
 
-    console.log('Total product names:', await productNames.count());
-    console.log('Visible product names:', await productNames.filter({ visible: true }).count());
+    const visibleProductNames = productNames.filter({ visible: true });
+    await expect(visibleProductNames).not.toHaveCount(0);
+    const productNamesText = await visibleProductNames.allTextContents();
+
+    for (const name of productNamesText) {
+        expect(name).toMatch(/Hammer/i);
+    }
 });

@@ -25,4 +25,8 @@ export class ProductSearchPage {
     getProductNames() {
         return this.productNames;
     }
+
+    resultsMessage(term: string) {
+        return this.page.getByText(new RegExp(`products found for '${term}'`));
+    }
 }
