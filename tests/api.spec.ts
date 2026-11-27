@@ -13,7 +13,7 @@ test('GET request fixture that checks the status and one field', async ({ reques
     expect(responseObject.data[0].name).toBe('Combination Pliers');
 });
 
-test('Create cart and add product', async ({ request }) => {
+test('C4 Add to a cart', async ({ request }) => {
     // Get a valid product ID
     const productsResponse = await request.get(`${baseURL}/products`);
 
@@ -57,7 +57,15 @@ test('Create cart and add product', async ({ request }) => {
 
         const cart = await getCartResponse.json();
 
-        expect(cart).toBeTruthy();
+        // Verify the cart contains the product we added
+        expect(cart.cart_items).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    product_id: productId,
+                    quantity: 1
+                })
+            ])
+        );
 
     } finally {
         // Delete the cart even if an assertion fails
